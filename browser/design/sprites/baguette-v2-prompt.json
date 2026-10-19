@@ -1,0 +1,26 @@
+{
+  "mode": "built-in image_gen edit",
+  "output": "../../public/assets/refresh/sprites/pierre-pixel-baguette-v2.png",
+  "dimensions": [
+    1470,
+    1070
+  ],
+  "transparent_background": true,
+  "requests": [
+    {
+      "prompt": "Use case: precise-object-edit.\nAsset type: transparent pixel-art platform game character sprite atlas.\nInput image 1 is the EDIT TARGET: the existing Pierre eight-pose atlas. Restore his signature baguette, changing only the addition of the bread and the minimal hand/arm contact required to carry it. Preserve the current character identity, face, black beret, red scarf, blue-white striped shirt, navy trousers, brown shoes, exact pixel-art rendering style, proportions, poses, and relative size.\nAdd ONE clearly readable golden-brown French baguette with pale diagonal scoring to EACH of the eight Pierre poses. A moderately long slim loaf, carried diagonally close to his torso, not a tiny roll. It should be comfortably carried in a hand or tucked under his arm in idle and running poses, tucked close while rising/falling, tucked securely under his arm or behind the shoulder while wall-clinging so the hands still reach the wall, and resting across his lap in the defeated sitting pose. Keep the baguette clear of his face and feet. Consistent bread design in every cell.\nPreserve the atlas layout EXACTLY: four columns and two rows on the same 1470 by 1070 transparent canvas, with generous transparent gutters. Top row left to right: idle, rightward running contact, running passing, alternate running contact. Bottom row: rising rightward, falling rightward, wall-clinging facing right, defeated sitting. Each pose remains in its existing cell with its existing head and feet position. No overlapping cells, no cropped bread or body, no extra figures. Keep the original image unchanged outside these localized additions.\nActual transparent alpha background, not black, white, or checkerboard pixels. No ground, shadows, captions, labels, UI, text, watermarks, or borders. Faithful pixel-art remaster, no smooth vector redraw.",
+      "referenced_image_paths": [
+        "browser/public/assets/refresh/sprites/pierre-pixel-v1.png"
+      ],
+      "output": "exec-a995b7c0-33b8-433e-a268-3ec3777e603a.png"
+    },
+    {
+      "prompt": "Use case: precise-object-edit. Input image is the EDIT TARGET, a transparent 1470x1070 pixel-art Pierre sprite atlas with four columns and two rows. Make ONE extremely localized correction only: in the BOTTOM LEFT cell (rising/jumping pose), Pierre currently has THREE hands. Remove the far-left empty hand and its short sleeve at approximately x50-115,y750-810. Keep the central hand gripping the baguette at approximately x150,y800 and keep his forward rightmost hand at x315,y790: exactly TWO arms and hands total in that pose. Restore transparent alpha where the extra hand was, with only the minimum shirt outline repair needed. Keep his bread, body, pose, head, clothes, size, feet and placement unchanged. Keep ALL OTHER SEVEN FRAMES absolutely unchanged. Preserve all eight baguettes. Preserve canvas dimensions, grid placement, crisp pixel-art, and genuine transparent background. No text or additional objects.",
+      "referenced_image_paths": [
+        "exec-a995b7c0-33b8-433e-a268-3ec3777e603a.png"
+      ],
+      "output": "exec-0170a27e-0a30-4eef-89b2-aadbdda2926f.png"
+    }
+  ],
+  "integration": "Output PNG copied unchanged. Measured alpha frame bounds and a constant 50px standing-height scale; no physics or Original changes."
+}

@@ -1,0 +1,47 @@
+{
+  "status": "Candidate previews only. Not referenced by the game and not deployed.",
+  "generator": "Built-in image_gen imagegen tool",
+  "originalReference": "../../public/assets/original/legacy/Background 1.png",
+  "chapterOne": "Retain the original training landscape.",
+  "assets": [
+    {
+      "file": "egypt-dunes-v1.png",
+      "chapter": 2,
+      "music": "egyptian level.wav",
+      "referenceRoles": [
+        "Original landscape: primary style/composition reference"
+      ],
+      "prompt": "Use case: stylized-concept. Asset: a single 16:9 raster background for the browser platformer Adventures of Pierre, preferably 1280x720 or a larger exact 16:9 PNG.\nInput image 1 is STYLE AND COMPOSITION REFERENCE ONLY, not an edit target. Generate a NEW EGYPTIAN DESERT / DUNES background in exactly this deliberately simple school-project MS Paint style. Match the original's broad flat fills, a simple two-color vertical sky gradient, thick uneven hand-drawn outlines, rounded rolling hills, sparse composition, and slightly wobbly juvenile drawing. Do not upgrade it into polished fantasy concept art.\nScene: a bright Egyptian desert. Replace the green hills with two layers of softly rolling ochre and pale-gold dunes, outlined in muted burnt sienna. Two very simple small pyramids sit FAR AWAY along the horizon, with triangular faces in only two flat colors, nothing ornate. A SINGLE oversized round yellow sun is partially cropped by the upper-left corner with blunt, uneven hand-drawn rays, echoing the reference. Sky is clear light turquoise fading to pale warm lavender near the horizon.\nComposition: wide flat side-view backdrop, no camera perspective ground plane. Horizon stays around 52% of image height. Keep the lower 40% an uninterrupted solid sandy fill with no objects or shading, and the central area very quiet so Pierre, actual platforms, checkpoints and enemies remain readable. Do not draw gameplay terrain, platforms, floors, ledges, characters, animals, props, UI, lettering or borders.\nPreserve the charming minimalism of the reference. No grain, textures, realistic light, 3D rendering, detailed brushwork, dramatic shadows, repeated suns, decorative clouds, or collage/contact sheet. One finished standalone background, fully opaque."
+    },
+    {
+      "file": "egypt-ruins-v1.png",
+      "chapter": 3,
+      "music": "egyptian level.wav",
+      "referenceRoles": [
+        "Original landscape: primary style/composition reference",
+        "egypt-dunes-v1.png: secondary series-consistency reference"
+      ],
+      "prompt": "Use case: stylized-concept. Asset: one standalone fully opaque wide 16:9 PNG background for Adventures of Pierre, a simple side-scrolling school platformer. Prefer 1280x720 or a larger exact 16:9 size.\nInput image 1 is the ORIGINAL STYLE AND LAYOUT reference. Input image 2 is a PALETTE AND SERIES CONSISTENCY reference: the newly created Egyptian dunes chapter. These are references only, not targets to edit.\nGenerate a complementary EGYPTIAN RUINS backdrop for another chapter using the same Egyptian music. Keep this extremely close to the original homemade MS Paint look: broad flat fills, sparse slightly wobbly thick outlines, only a simple sky gradient, rounded hills, no polished concept-art rendering.\nScene: low sandy hills and dunes with a few SMALL distant ancient Egyptian ruins silhouetted along the horizon: two or three squat broken columns, a modest simple temple gateway, and one tiny triangular pyramid far away. Restrained shapes, no inscriptions or ornament. Use flat dusty gold, clay rose and muted terracotta, and a simple dusky blue-to-lavender sky to distinguish it from the brighter dunes chapter. A single pale ochre sun is partially cropped in the upper-left corner, echoing the original. Keep it daytime/twilight, NOT a dark interior.\nComposition: level side view with horizon around 52% down; most landmarks stay between 35% and 55% image height. Lower 40% is an uninterrupted flat sandy clay fill, empty and quiet behind gameplay. No detailed foreground, no floor perspective, no ground textures. The game draws its own platforms and objects over this.\nNo characters, animals, gameplay platforms, ledges, obstacles, UI, logos, text, borders, collage, realistic textures, photographic effects or 3D. No extra suns. Match the rough, modest charm of the school-project reference rather than making it professionally illustrated. One finished landscape only."
+    },
+    {
+      "file": "snow-v1.png",
+      "chapter": 4,
+      "music": "snow level.wav",
+      "referenceRoles": [
+        "Original landscape: primary style/composition reference",
+        "egypt-dunes-v1.png: secondary series-consistency reference"
+      ],
+      "prompt": "Use case: stylized-concept. Asset: one standalone opaque 16:9 raster background for Adventures of Pierre's SNOW chapter. Prefer 1280x720 or a larger exact 16:9 image.\nInput image 1 is STYLE AND COMPOSITION reference only: the original homemade school-project background. Input image 2 is SERIES CONSISTENCY reference: a newly generated desert background. Generate a fresh winter sibling, not a collage or an edit of either file.\nMatch the first image's intentionally modest MS Paint style very closely: big simple flat filled shapes, thick uneven dark outlines, childlike rounded hills, simple sky gradient and almost no detail. Keep the same relative scale of horizon and large cropped celestial body. No polished fantasy painting, texture, 3D, airbrush shading, photographic snow, or dramatic lighting.\nScene: snowy rolling hills with a few very simple distant triangular snow-capped peaks at the horizon. Flat white snow caps above muted blue hill shapes, with broad deep blue-gray outlines. Clear pale periwinkle sky fading into icy lavender. A SINGLE large pale cream winter sun is partly cropped by the upper-left corner, with a few uneven short blunt rays recalling the original.\nComposition: side-on distant landscape. Horizon around halfway down. All mountain detail stays mostly within the middle third. The lower 40% must be a quiet uninterrupted flat medium desaturated blue fill (approximately #7da5bd), not pure white, so the game's white snowy platforms can be clearly distinguished when overlaid. No foreground details, ground perspective, texture or small marks in this lower region.\nNo falling snow particles, clouds, characters, animals, game platforms, ledges, trees in the foreground, signs, text, UI, logos, borders, repeated suns, or contact sheet. The game supplies its own clouds, platforms and characters. One simple coherent finished landscape only."
+    },
+    {
+      "file": "moon-v1.png",
+      "chapter": 5,
+      "music": "moon level.wav",
+      "referenceRoles": [
+        "Original landscape: primary style/composition reference",
+        "egypt-dunes-v1.png: secondary series-consistency reference"
+      ],
+      "prompt": "Use case: stylized-concept. Asset: one standalone opaque wide 16:9 raster background for Adventures of Pierre's MOONLIT FINAL CHAPTER. Prefer 1280x720 or a larger exact 16:9 image.\nInput image 1 is the primary STYLE AND COMPOSITION reference: the original homemade school-project MS Paint background. Input image 2 is a secondary SERIES CONSISTENCY reference for matching the simple outlines and rolling-hill shapes. References only, not edit targets.\nGenerate a moonlit night sibling in the exact same charmingly rough, sparse drawing style. Broad flat fills, thick uneven blunt outlines, gently wobbly rounded hills. A simple two-color sky gradient is okay, but no painterly lighting, realistic texture, glossy rendering, or sophisticated illustration.\nScene: quiet lavender-gray rolling hills beneath a charcoal-plum night sky that fades to muted dusty violet at the horizon. Two layers of rounded hills have simple dark violet outlines and broad flat gray-lavender fills. A SINGLE oversized off-white full moon is partly cropped by the UPPER LEFT corner, taking the same place and scale as the sun in the original. Give the moon only three simple flat pale-gray round crater marks; NO sun rays and no glow. Around six small, casually hand-drawn white four-point stars, widely spaced in the upper sky only. No second celestial body.\nComposition: side-on background. Horizon is around 52% down the canvas. Keep the lower 40% as an uninterrupted flat muted gray-lavender fill, quiet and light enough that the game's dark platforms and characters will stand out. No foreground texture, terrain features, camera-perspective ground plane, or objects near the player area.\nNo characters, corgis or other animals, platforms, ledges, game obstacles, spaceships, flags, UI, text, logos, frame, collage or contact sheet. No dramatic beams, bokeh, photorealism or detailed stars. Preserve the modest school-project feeling of the first reference. One finished background image only."
+    }
+  ]
+}

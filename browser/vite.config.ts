@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
-import { readFileSync, readdirSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { refreshBackgrounds } from './src/game/refreshBackgrounds';
+import { refreshSpriteAssets } from './src/game/refreshSprites';
 
 export default defineConfig(({ command }) => ({
   base: process.env.PIERRE_BASE_PATH || '/',
@@ -17,9 +19,18 @@ export default defineConfig(({ command }) => ({
       const files = [
         ...legacy.map(name => 'assets/original/legacy/' + name),
         'assets/original/data/Levels2.txt',
+        ...refreshBackgrounds.map(background => 'assets/refresh/backgrounds/' + background.file),
+        ...refreshSpriteAssets.map(asset => 'assets/refresh/sprites/' + asset.file),
         ...readdirSync(resolve('public/assets/derived')).map(name => 'assets/derived/' + name),
       ];
       for (const fileName of files) this.emitFile({ type: 'asset', fileName, source: readFileSync(resolve('public', fileName)) });
+    },
+    writeBundle(options) {
+      const output = resolve(options.dir ?? 'dist');
+      for (const edition of ['original', 'refresh']) {
+        mkdirSync(resolve(output, edition), { recursive: true });
+        copyFileSync(resolve(output, 'index.html'), resolve(output, edition, 'index.html'));
+      }
     },
   }],
   build: { rollupOptions: { output: { manualChunks: { phaser: ['phaser'] } } } },

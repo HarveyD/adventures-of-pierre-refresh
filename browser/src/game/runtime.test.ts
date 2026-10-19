@@ -4,6 +4,7 @@ import { PierreRuntime } from './runtime';
 import { parseLegacyLevels } from './levelParser';
 import { levelContent } from './content';
 import { CORGI_WIDTH, CORGI_HEIGHT, spawnEnemies } from './enemies';
+import { REFRESH_WALL_JUMP } from './modeConfig';
 import type { LegacyCampaign } from './types';
 import firstLevelReplay from './refresh-first-level.replay.json';
 import secondLevelReplay from './refresh-second-level.replay.json';
@@ -201,6 +202,133 @@ describe('simulation', () => {
     expect(runtime.bossState.active).toBe(false);
     runtime.debugController.warpTo(1670, 240); runtime.update(5);
     expect(runtime.snapshot.status).toBe('finished');
+  });
+});
+
+describe('Refresh wall jumping', () => {
+  const wallRoom = (side: -1 | 1, mode: 'refresh' | 'original' = 'refresh') => {
+    const level = structuredClone(room);
+    level.levels[0].platforms.push({ ...level.levels[0].platforms[0], ordinal: 2,
+      x: side === 1 ? 500 : 330, y: -1000, width: 50, height: 1340 });
+    const runtime = new PierreRuntime(level, mode);
+    runtime.debugController.warpTo((side === 1 ? 465 : 380) - 515, 100 - 50);
+    return runtime;
+  };
+  it.each([-1, 1] as const)('catches the %s wall and jumps without holding a direction', side => {
+    const runtime = wallRoom(side); advance(runtime, 100);
+    expect(side === 1 ? runtime.snapshot.onRightWall : runtime.snapshot.onLeftWall).toBe(true);
+    expect(runtime.snapshot.yVel).toBeLessThanOrEqual(REFRESH_WALL_JUMP.slideSpeed);
+    runtime.setAction('jump', true);
+    expect(runtime.snapshot.pVel).toBe(-side * REFRESH_WALL_JUMP.kickSpeed);
+    expect(runtime.snapshot.yVel).toBe(-15);
+  });
+  it.each([-1, 1] as const)('allows a late jump after steering away from the %s wall', side => {
+    const runtime = wallRoom(side); advance(runtime, 20);
+    runtime.setAction(side === 1 ? 'left' : 'right', true); advance(runtime, 80);
+    expect(runtime.snapshot.onLeftWall || runtime.snapshot.onRightWall).toBe(false);
+    runtime.setAction('jump', true);
+    expect(runtime.snapshot.yVel).toBe(-15);
+    expect(runtime.snapshot.pVel).toBe(-side * REFRESH_WALL_JUMP.kickSpeed);
+  });
+  it('expires wall grace and cannot reuse a consumed contact for a midair double jump', () => {
+    const runtime = wallRoom(1); advance(runtime, 20);
+    runtime.setAction('left', true); advance(runtime, 240);
+    runtime.setAction('jump', true); expect(runtime.snapshot.yVel).toBeGreaterThanOrEqual(0);
+    const jumping = wallRoom(1); advance(jumping, 20); jumping.setAction('jump', true);
+    jumping.setAction('jump', false); advance(jumping, 40);
+    const before = jumping.snapshot.yVel; jumping.setAction('jump', true);
+    expect(jumping.snapshot.yVel).toBe(before);
+  });
+  it('buffers jump shortly before touching a wall', () => {
+    const runtime = wallRoom(1); runtime.debugController.warpTo(440 - 515, 100 - 50);
+    runtime.setAction('right', true); advance(runtime, 100);
+    expect(runtime.snapshot.onRightWall).toBe(false);
+    runtime.setAction('jump', true); advance(runtime, 100);
+    expect(runtime.snapshot.yVel).toBeLessThan(0); expect(runtime.snapshot.pVel).toBeLessThan(0);
+  });
+  it('protects the upward boost on a short tap without changing normal jump release', () => {
+    const runtime = wallRoom(1); advance(runtime, 20); runtime.setAction('jump', true);
+    runtime.setAction('jump', false); expect(runtime.snapshot.yVel).toBe(-15);
+    advance(runtime, 100); expect(runtime.snapshot.yVel).toBeLessThanOrEqual(-10);
+    const normal = new PierreRuntime(room, 'refresh'); advance(normal, 20);
+    normal.setAction('jump', true); normal.setAction('jump', false);
+    expect(normal.snapshot.yVel).toBe(-6.75);
+  });
+  it('hands steering back quickly and permits repeated jumps after genuine recontact', () => {
+    const runtime = wallRoom(1); advance(runtime, 20);
+    const startY = runtime.getPlayerWorldPosition().y;
+    for (let jump = 0; jump < 3; jump++) {
+      runtime.setAction('right', true); runtime.setAction('jump', true); runtime.setAction('jump', false);
+      expect(runtime.snapshot.yVel).toBe(-15);
+      advance(runtime, 80); expect(runtime.snapshot.pVel).toBeGreaterThan(-REFRESH_WALL_JUMP.kickSpeed);
+      for (let tick = 0; tick < 100 && !runtime.snapshot.onRightWall; tick++) advance(runtime, 5);
+      expect(runtime.snapshot.onRightWall).toBe(true);
+    }
+    expect(runtime.getPlayerWorldPosition().y).toBeLessThan(startY - 200);
+  });
+  it('does not auto-jump repeatedly while jump is held', () => {
+    const runtime = wallRoom(1); advance(runtime, 20);
+    runtime.setAction('right', true); runtime.setAction('jump', true); advance(runtime, 700);
+    expect(runtime.snapshot.onRightWall).toBe(true); expect(runtime.snapshot.yVel).toBeGreaterThanOrEqual(0);
+  });
+  it('keeps wall-jump results identical across render frame chunking', () => {
+    const a = wallRoom(1), b = wallRoom(1);
+    for (const runtime of [a, b]) {
+      advance(runtime, 100); runtime.setAction('right', true); runtime.setAction('jump', true); runtime.setAction('jump', false);
+    }
+    for (let frame = 0; frame < 5; frame++) {
+      for (let step = 0; step < 5; step++) a.update(20);
+      b.update(33); b.update(17); b.update(50);
+    }
+    expect(a.snapshot).toEqual(b.snapshot);
+  });
+  it('clears contact grace on pause, warp, restart and death', () => {
+    const runtime = wallRoom(1); advance(runtime, 20);
+    runtime.setAction('left', true); advance(runtime, 80);
+    runtime.setPaused(true); runtime.setPaused(false); runtime.setAction('jump', true);
+    expect(runtime.snapshot.yVel).toBeGreaterThanOrEqual(0);
+    runtime.debugController.warpTo(0, 50); runtime.setAction('jump', true);
+    expect(runtime.snapshot.yVel).toBe(0);
+    runtime.restartLevel(); expect(runtime.snapshot.pVel).toBe(0);
+    runtime.debugController.warpTo(0, 3000); advance(runtime, 20); advance(runtime, 400);
+    expect(runtime.snapshot.lives).toBe(4); expect(runtime.snapshot.pVel).toBe(0);
+  });
+  it('preserves Original direction requirements, kick speed and tap release', () => {
+    const runtime = wallRoom(1, 'original'); advance(runtime, 20);
+    expect(runtime.snapshot.onRightWall).toBe(false);
+    runtime.setAction('right', true); advance(runtime, 20); runtime.setAction('jump', true);
+    expect(runtime.snapshot).toMatchObject({ pVel: -16, yVel: -15 });
+    runtime.setAction('jump', false); expect(runtime.snapshot.yVel).toBe(0);
+  });
+});
+
+describe('impact events', () => {
+  it.each(['original', 'refresh'] as const)('emits landing feedback once per real impact in %s', mode => {
+    const runtime = new PierreRuntime(room, mode);
+    runtime.consumeEvents();
+    advance(runtime, 100); expect(runtime.consumeEvents()).toEqual([]);
+    runtime.debugController.warpTo(-100, 100); advance(runtime, 600);
+    const landings = runtime.consumeEvents().filter(event => event.type === 'landing');
+    expect(landings).toHaveLength(mode === 'refresh' ? 1 : 0);
+    if (mode === 'refresh') expect(landings[0]).toMatchObject({ x: 432.5, y: 340 });
+    advance(runtime, 1000); expect(runtime.consumeEvents()).toEqual([]);
+  });
+  it('emits a checkpoint cue only on activation, not every sensor tick', () => {
+    const runtime = new PierreRuntime(campaign, 'refresh'); runtime.consumeEvents();
+    runtime.debugController.warpTo(630, 240); advance(runtime, 100);
+    expect(runtime.consumeEvents().filter(event => event.type === 'checkpoint')).toEqual([
+      { type: 'checkpoint', levelIndex: 0, checkpointOrdinal: runtime.snapshot.checkpointOrdinal },
+    ]);
+    advance(runtime, 100); expect(runtime.consumeEvents().filter(event => event.type === 'checkpoint')).toEqual([]);
+  });
+  it('emits one stomp at the enemy position without changing bounce velocity', () => {
+    const runtime = new PierreRuntime(campaign, 'refresh'); runtime.consumeEvents();
+    const enemy = runtime.enemyState[0];
+    runtime.debugController.warpTo(enemy.x + 15 - 515, enemy.y - 55 - 50);
+    for (let tick = 0; tick < 100 && enemy.alive; tick++) advance(runtime, 5);
+    expect(enemy.alive).toBe(false); expect(runtime.snapshot.yVel).toBe(-20);
+    expect(runtime.consumeEvents().filter(event => event.type === 'stomp')).toEqual([{ type: 'stomp', x: enemy.x + 25, y: enemy.y }]);
+    advance(runtime, 50); expect(runtime.consumeEvents().filter(event => event.type === 'stomp')).toEqual([]);
   });
 });
 

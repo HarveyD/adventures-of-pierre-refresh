@@ -35,6 +35,14 @@ Original follows the launcher-selected `Harvey Java/Sidescroller2.java` for menu
 
 Refresh shares the level importer and simulation. It adds 100 ms of coyote time, a 120 ms jump buffer, a softer jump release, wall sliding, camera look-ahead, chapter selection, and a taller portrait viewport. Snow's unfinished later route has explicit bridge/step repairs and its exit is moved to the far ledge. The final stub is replaced by a playable arena with three boss stomps and a gated finish.
 
+Refresh also adds chapter-specific illustrated backgrounds, landing dust, stomp and boss impact bursts, and animated checkpoint flags with activation chimes. Short synthesized cues share the existing mute/volume controls and stop on pause, menu, restart, and death. Visual effects respect reduced-motion preferences. These additions do not change collision rules or run timing; Original keeps its existing art and audio behavior.
+
+Refresh wall jumps recognize neutral wall contact, allow 120 ms of wall grace, and buffer an early jump press. A smaller sideways kick and 60 ms steering lock make repeated jumps up the same wall easier. The first 120 ms of rise are protected from a quick release, and wall slides are slower. Holding jump does not auto-climb, and consumed wall contact cannot grant midair double jumps. Original retains its previous wall behavior.
+
+Refresh terrain is drawn as continuous fills with caps only on exposed surfaces, removing internal rectangle seams. Each chapter has a surface-mounted checkered finish arch; the boss exit displays a lock until the fight is won. Pierre and the corgis use new transparent pixel-art remaster atlases with foot-aligned frames and unchanged hitboxes. Refresh uses a 2x backing canvas for sharper high-density display. See [sprite sources and exact prompts](design/sprites/README.md); Original retains its source art and animation timings.
+
+Platform materials follow each chapter: mossy stone, layered sandstone, carved ruins, glacial ice, and lunar rock. Deeper surface caps and exterior-only bevels make the walking edges and wall-jump surfaces clearer without outlining internal joins. Moving platforms use amber metal treads; trampolines have a cyan spring bed. Small native textures are baked once and rendered through a reusable tile pool, with static patterns anchored to the world and moving textures anchored to their platforms. This is a visual change only.
+
 See [RESTORATION.md](RESTORATION.md) for the detailed change record and [reference/](reference/) for native screenshots and measurements.
 
 ## Media
@@ -49,15 +57,19 @@ python3 scripts/prepare-media.py --ffmpeg /path/to/ffmpeg
 
 GIFs are composited into PNG strips with original frame timing and loop metadata. `media.json` records source SHA-256 hashes. Audio is encoded as 96 kb/s MP3 with an Ogg alternative. No audio is requested on the menu; the current chapter's track loads on play. Optional audio failure does not block gameplay. The build publishes only referenced original images, level data, and derivatives, excluding the large WAV/GIF masters and unused experiments.
 
+New Refresh illustrations live in `public/assets/refresh/backgrounds/`; generated source copies and prompts are documented in [design/backgrounds/](design/backgrounds/README.md). Training retains the original scene, followed by Egyptian dunes, Egyptian ruins, snow, and moon artwork. Original does not request the new illustrations. Web Audio for impact cues is initialized only by a play/input gesture and fails silently if unsupported.
+
 ## Hosting
 
-`pnpm build` produces a static `dist/` directory. Configure the host to serve `index.html` for `/original` and `/refresh`. For a subdirectory deployment:
+`pnpm build` produces a static `dist/` directory, including real `original/index.html` and `refresh/index.html` entry pages. A static host with directory indexes can serve both editions without SPA fallback rewrites. For a subdirectory deployment:
 
 ```sh
 PIERRE_BASE_PATH=/pierre/ pnpm build
 ```
 
 Asset URLs, edition links, and route detection respect that base. The app needs no server-side API or account.
+
+For the prepared `harveydelaney.com/adventures-of-pierre/` package, run `pnpm build:hosted`. This creates an isolated `hosted-dist/` tree plus `releases/adventures-of-pierre.tar.gz` and its SHA-256 checksum. It does not upload or deploy anything. See [HOSTING.md](HOSTING.md) for local static-server checks and the existing server's deployment layout.
 
 ## Reference Capture
 

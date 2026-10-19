@@ -1,12 +1,13 @@
 import { levelContent } from './content';
 import { CORGI_WIDTH, CORGI_HEIGHT, spawnEnemies, type EnemyState } from './enemies';
-import { MODE_CONFIG } from './modeConfig';
+import { MODE_CONFIG, REFRESH_WALL_JUMP } from './modeConfig';
 import type { LegacyCampaign, LegacyPlatform, RouteMode } from './types';
 
 export type RuntimeStatus = 'playing' | 'game-over' | 'finished';
 export type ActionName = 'left' | 'right' | 'jump';
 export interface RuntimeEvent {
-  type: 'checkpoint' | 'respawn' | 'level-changed' | 'game-over' | 'finished' | 'boss-hit' | 'boss-defeated';
+  type: 'checkpoint' | 'respawn' | 'level-changed' | 'game-over' | 'finished' | 'boss-hit' | 'boss-defeated' | 'landing' | 'stomp';
+  x?: number; y?: number; strength?: number; checkpointOrdinal?: number;
   levelIndex?: number; lives?: number; bossLives?: number;
 }
 export interface DynamicPlatform extends LegacyPlatform {
@@ -55,6 +56,9 @@ export class PierreRuntime {
   private jumpRequest = 0;
   private coyote = 0;
   private wallLock = 0;
+  private wallGrace = 0;
+  private lastWall = 0;
+  private wallRise = 0;
   private checkpoint = { x: 415, y: 280, id: -1 };
   private accumulator = 0;
   private tick = 0;
@@ -97,7 +101,10 @@ export class PierreRuntime {
   }
   get debugController(): RuntimeDebugController {
     return {
-      warpTo: (x, y) => { this.x = x + 515; this.y = y + 50; this.vx = this.vy = 0; this.clearInput(); this.grounded = false; },
+      warpTo: (x, y) => {
+        this.x = x + 515; this.y = y + 50; this.vx = this.vy = 0; this.clearInput(); this.grounded = false;
+        if (this.mode === 'refresh') this.wallLock = this.wallRise = 0;
+      },
       setCheckpoint: (x, y) => { this.checkpoint = { x: x + 515, y: y + 50, id: 0 }; },
       setLevel: index => this.selectLevel(index),
     };
@@ -146,6 +153,7 @@ export class PierreRuntime {
     this.vx = 0; this.vy = 0; this.grounded = false; this.wall = 0;
     this.accumulator = 0; this.tick = 0; this.enemyDebt = 0;
     this.coyote = 0; this.wallLock = 0; this.deathMs = 0;
+    this.wallGrace = this.lastWall = this.wallRise = 0;
     this.clearInput();
     this.revision++;
   }
@@ -164,7 +172,10 @@ export class PierreRuntime {
     this.boss = { active: this.config.boss && this.levelIndex === 4, x: 2020, y: 190, missileX: 2020, missileY: 240, projectileActive: false, hitCooldown: 0 };
   }
 
-  clearInput(): void { this.left = this.right = this.jumpHeld = false; this.jumpRequest = 0; }
+  clearInput(): void {
+    this.left = this.right = this.jumpHeld = false; this.jumpRequest = 0;
+    if (this.mode === 'refresh') this.wall = this.wallGrace = this.lastWall = 0;
+  }
   setPaused(paused: boolean): void {
     this.paused = paused;
     this.clearInput();
@@ -184,16 +195,21 @@ export class PierreRuntime {
       this.tryJump();
     } else if (!pressed && this.jumpHeld) {
       this.jumpHeld = false;
-      if (this.vy < 0) this.vy = this.mode === 'original' ? 0 : this.vy * 0.45;
+      if (this.vy < 0 && this.wallRise === 0) this.vy = this.mode === 'original' ? 0 : this.vy * 0.45;
     }
   }
   private tryJump(): void {
     if (!this.jumpRequest) return;
     if (this.grounded || this.coyote > 0) {
       this.vy = -15; this.grounded = false; this.coyote = 0; this.jumpRequest = 0;
-    } else if (this.wall !== 0) {
-      this.vx = -this.wall * 16; this.vy = -15; this.wall = 0;
-      this.wallLock = 100; this.grounded = false; this.coyote = 0; this.jumpRequest = 0;
+    } else if (this.wall !== 0 || (this.mode === 'refresh' && this.wallGrace > 0)) {
+      const side = this.wall || this.lastWall;
+      this.vx = -side * (this.mode === 'refresh' ? REFRESH_WALL_JUMP.kickSpeed : 16);
+      this.vy = -15; this.wall = 0;
+      this.wallLock = this.mode === 'refresh' ? REFRESH_WALL_JUMP.steerLockMs : 100;
+      this.wallRise = this.mode === 'refresh' ? REFRESH_WALL_JUMP.minimumRiseMs : 0;
+      this.wallGrace = this.lastWall = 0;
+      this.grounded = false; this.coyote = 0; this.jumpRequest = 0;
     }
   }
 
@@ -217,6 +233,8 @@ export class PierreRuntime {
     this.elapsedMs += 5;
     this.invulnerableMs = Math.max(0, this.invulnerableMs - 5);
     this.wallLock = Math.max(0, this.wallLock - 5);
+    this.wallGrace = Math.max(0, this.wallGrace - 5);
+    this.wallRise = Math.max(0, this.wallRise - 5);
     this.coyote = this.grounded ? this.config.coyoteMs : Math.max(0, this.coyote - 5);
     if (this.tick % 2 === 0) this.movePlatforms();
     this.enemyDebt += 5;
@@ -264,6 +282,7 @@ export class PierreRuntime {
   }
   private physicsStep(): void {
     this.tryJump();
+    const wasGrounded = this.grounded;
     const oldX = this.x, oldY = this.y;
     const solids = this.currentPlatforms.filter(p => p.type === 0 || p.type === 1 || p.type === 3);
     this.wall = 0;
@@ -281,6 +300,7 @@ export class PierreRuntime {
       this.vx += Math.sign(target - this.vx) * Math.min(1, Math.abs(target - this.vx));
     } else if (Math.abs(this.vx) > 10) this.vx -= Math.sign(this.vx);
     this.vy = Math.min(this.vy + 1, 15);
+    const impactSpeed = this.vy;
     this.y += this.vy;
     this.grounded = false;
     for (const p of solids) {
@@ -293,20 +313,30 @@ export class PierreRuntime {
         this.y = p.currentY + p.height; this.vy = 0;
       }
     }
-    // Contact persists while pushing a wall, even on the zero-velocity tick.
+    // Refresh can catch a wall without holding into it; Original still requires direction input.
     if (!this.grounded) for (const p of solids) {
       if (this.y + HEIGHT <= p.currentY || this.y >= p.currentY + p.height) continue;
-      if (this.right && Math.abs(this.x + WIDTH - p.currentX) < 1) this.wall = 1;
-      if (this.left && Math.abs(this.x - p.currentX - p.width) < 1) this.wall = -1;
+      const tolerance = this.mode === 'refresh' ? REFRESH_WALL_JUMP.contactTolerance : 1;
+      if ((this.right || this.mode === 'refresh') && Math.abs(this.x + WIDTH - p.currentX) < tolerance) this.wall = 1;
+      if ((this.left || this.mode === 'refresh') && Math.abs(this.x - p.currentX - p.width) < tolerance) this.wall = -1;
     }
     if (this.grounded) this.wall = 0;
-    if (this.wall && this.mode === 'refresh') this.vy = Math.min(this.vy, 3);
+    if (this.mode === 'refresh') {
+      if (this.grounded) this.wallGrace = this.lastWall = this.wallRise = 0;
+      else if (this.wall && this.wallLock === 0) {
+        this.lastWall = this.wall; this.wallGrace = REFRESH_WALL_JUMP.graceMs;
+        this.vy = Math.min(this.vy, REFRESH_WALL_JUMP.slideSpeed);
+      }
+    }
     for (const enemy of this.enemies) {
       if (!enemy.alive || !overlaps(this.x, this.y, WIDTH, HEIGHT, enemy.x, enemy.y, CORGI_WIDTH, CORGI_HEIGHT)) continue;
       if (this.vy >= 0 && oldY + HEIGHT <= enemy.y + 12) {
         enemy.alive = false; this.vy = -20;
+        if (this.mode === 'refresh') this.events.push({ type: 'stomp', x: enemy.x + CORGI_WIDTH / 2, y: enemy.y });
       } else if (this.damage()) return;
     }
+    if (this.mode === 'refresh' && this.grounded && !wasGrounded && impactSpeed >= 5)
+      this.events.push({ type: 'landing', x: this.x + WIDTH / 2, y: this.y + HEIGHT, strength: impactSpeed / 15 });
     if (this.y > Math.max(...this.currentPlatforms.map(p => p.baseY)) + 1400) this.damage(true);
   }
   private checkSensors(): boolean {
@@ -318,7 +348,7 @@ export class PierreRuntime {
       if (p.type === 4 && p.ordinal !== this.checkpoint.id) {
         const x = this.mode === 'original' ? this.x : p.currentX - 20;
         this.checkpoint = { x, y: Math.min(this.y, p.currentY + p.height - HEIGHT), id: p.ordinal };
-        this.events.push({ type: 'checkpoint', levelIndex: this.levelIndex });
+        this.events.push({ type: 'checkpoint', levelIndex: this.levelIndex, checkpointOrdinal: p.ordinal });
       }
       if (p.type === 2) {
         if (this.levelIndex === 4 && this.config.boss && this.bossLives > 0) continue;
@@ -371,10 +401,10 @@ export class PierreRuntime {
     if (overlaps(this.x, this.y, WIDTH, HEIGHT, boss.x, boss.y, 90, 65)) {
       if (this.vy >= 0 && this.y + HEIGHT < boss.y + 28 && boss.hitCooldown === 0) {
         this.bossLives--; boss.hitCooldown = 900; this.vy = -18;
-        this.events.push({ type: 'boss-hit', levelIndex: this.levelIndex, bossLives: this.bossLives });
+        this.events.push({ type: 'boss-hit', levelIndex: this.levelIndex, bossLives: this.bossLives, x: boss.x + 45, y: boss.y });
         if (this.bossLives === 0) {
           boss.active = false; boss.projectileActive = false;
-          this.events.push({ type: 'boss-defeated', levelIndex: this.levelIndex });
+          this.events.push({ type: 'boss-defeated', levelIndex: this.levelIndex, x: boss.x + 45, y: boss.y });
         }
       } else if (!boss.hitCooldown) this.damage();
     }

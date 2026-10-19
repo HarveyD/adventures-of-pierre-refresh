@@ -1,5 +1,14 @@
 import type { RouteMode } from './types';
 
+export const REFRESH_WALL_JUMP = {
+  graceMs: 120,
+  kickSpeed: 8,
+  steerLockMs: 60,
+  minimumRiseMs: 120,
+  slideSpeed: 2,
+  contactTolerance: 2,
+} as const;
+
 export const LEVEL_NAMES = ['The training grounds', 'High country', 'The moving maze', 'Snowbound', 'The moonlit feast'];
 export const MODE_CONFIG = {
   original: { coyoteMs: 0, bufferMs: 0, checkpointY: 250, enemyStepMs: 3, boss: false, cameraLookAhead: 0 },

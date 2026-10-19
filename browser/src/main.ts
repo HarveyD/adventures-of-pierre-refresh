@@ -11,7 +11,7 @@ import type { ActionName } from './game/runtime';
 import type { RouteMode } from './game/types';
 
 const root = document.querySelector<HTMLDivElement>('#app')!;
-const relativePath = window.location.pathname.slice(import.meta.env.BASE_URL.replace(/\/$/, '').length).replace(/\/+$/, '') || '/';
+const relativePath = window.location.pathname.slice(import.meta.env.BASE_URL.replace(/\/$/, '').length).replace(/\/index\.html$/, '').replace(/\/+$/, '') || '/';
 const mode: RouteMode = relativePath === '/original' ? 'original' : 'refresh';
 const settings = loadSettings();
 const icon = (node: IconNode) => createElement(node, { width: 20, height: 20, 'aria-hidden': 'true', 'stroke-width': 1.8 }).outerHTML;
@@ -20,7 +20,7 @@ root.innerHTML = `
   <main class="game-app ${mode}">
     <header class="app-header">
       <div class="brand"><img src="${assetUrl('assets/derived/player-run-right.png')}" alt="" class="brand-pierre"><div><h1>Adventures of Pierre</h1><span>By Harvey &amp; James</span></div></div>
-      <nav class="mode-switch" aria-label="Game edition"><a href="${assetUrl('original')}" ${mode === 'original' ? 'aria-current="page"' : ''}>Original</a><a href="${assetUrl('refresh')}" ${mode === 'refresh' ? 'aria-current="page"' : ''}>Refresh</a></nav>
+      <nav class="mode-switch" aria-label="Game edition"><a href="${assetUrl('original/')}" ${mode === 'original' ? 'aria-current="page"' : ''}>Original</a><a href="${assetUrl('refresh/')}" ${mode === 'refresh' ? 'aria-current="page"' : ''}>Refresh</a></nav>
       <div class="tools">${tool('menu', 'Menu', Home)}${tool('pause', 'Pause', Pause)}${tool('restart', 'Restart level', RotateCcw)}${tool('mute', 'Mute', Volume2)}${tool('settings', 'Settings', SettingsIcon)}${tool('fullscreen', 'Fullscreen', Maximize)}</div>
     </header>
     <div class="hud" aria-label="Game status"><div class="level-hud">${icon(Flag)}<span id="level-name">The training grounds</span></div><div class="lives-hud">${icon(Heart)}<span id="lives">5</span></div><span id="audio-status" hidden>Audio unavailable</span><span class="edition-label">${mode === 'original' ? 'Original edition' : 'Refresh edition'}</span></div>
@@ -32,7 +32,7 @@ root.innerHTML = `
   </main>
   <dialog id="settings-dialog" aria-labelledby="settings-title">
     <div class="dialog-heading"><h2 id="settings-title">Settings</h2>${tool('close-settings', 'Close settings', X)}</div>
-    <label class="volume-label" for="volume">Music <output id="volume-value"></output></label><input id="volume" type="range" min="0" max="1" step="0.05" value="${settings.volume}">
+    <label class="volume-label" for="volume">${mode === 'refresh' ? 'Audio' : 'Music'} <output id="volume-value"></output></label><input id="volume" type="range" min="0" max="1" step="0.05" value="${settings.volume}">
     <div class="bindings"><h3>Controls</h3>${(['left', 'right', 'jump'] as ActionName[]).map(action => `<div><label for="bind-${action}">${action === 'jump' ? 'Jump' : 'Move ' + action}</label><button id="bind-${action}" data-bind="${action}"></button></div>`).join('')}</div>
     <p id="binding-status" class="binding-status" aria-live="polite"></p>
     <div class="dialog-actions"><button id="reset-controls">Reset controls</button><button id="reset-progress">Reset progress</button></div>
@@ -152,7 +152,7 @@ const execute = (command: string) => {
   else if (command === 'menu') showMenu();
   else if (command === 'controls' || command === 'help' || command === 'levels') { panel = command; renderOverlay(); }
   else if (command === 'back') { remapping = null; panel = 'menu'; renderOverlay(); }
-  else if (command === 'refresh') location.assign(assetUrl('refresh'));
+  else if (command === 'refresh') location.assign(assetUrl('refresh/'));
   else if (command === 'settings') openSettings();
 };
 root.addEventListener('click', event => {
