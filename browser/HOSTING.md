@@ -87,3 +87,28 @@ The `backups/source-before.tar.gz` archive in that private directory contains th
 The package checksum and both staged copies were verified before promotion. Only Pierre's folder was renamed into place. Post-deployment checks verified all 34 public game files against the local package, both editions, explicit entry pages, and edition switching in Chrome, Firefox, and WebKit on desktop/mobile viewports. The homepage and seven existing side-project paths matched their pre-deployment status/content hashes. The existing `/compounding-savings/` 404 was present beforehand and was left unchanged. The container ID, image, start time, restart count, protected server files, and configuration hashes remained unchanged.
 
 For this first release, rollback means renaming only `public/adventures-of-pierre/` out of the served path in the running container and server source, restoring the previous absent-game state. Keep the renamed files and private release archive for diagnosis. Do not restore the entire website or replace its `public/` directory to undo a game-only deployment. Future updates must back up the previous game release before promotion.
+
+## Latest Refresh Release
+
+Release: `20261019T190851Z-5090dc0`, published October 19, 2026. Application commit: `c4964fe`; hosted-packaging fix: `5090dc0`.
+
+Package SHA-256: `accc2956777fc269666e19de75f7178111cf2a7df30ec7758df9957a4286b1b2`.
+
+Includes chapter backgrounds, improved Refresh wall jumps, material-based terrain, finish arches, audiovisual feedback, remastered characters, and Pierre's restored baguette. Original retains its archived sprites and gameplay. The packaging script now disables macOS resource-fork metadata and rejects archives containing metadata sidecars. An earlier staging attempt was rejected before promotion because it contained those files.
+
+Private server audit directory: `/root/pierre-deployments/20261019T190851Z-5090dc0/`. It contains the package, checksum, 40-file manifest, pre/post website and protected-file reports, and separate `backups/source-game-before.tar.gz` and `backups/runtime-game-before.tar.gz` archives.
+
+The source and runtime game directories were each promoted with an atomic Linux directory exchange. No request sees a missing game directory during either exchange. Previous copies remain outside the served prefix:
+
+- Source: `/root/pierre-deployments/20261019T190851Z-5090dc0/staged/adventures-of-pierre/`
+- Runtime: `/home/portfolio/src/.pierre-stage-20261019T190851Z-5090dc0/`
+
+Verification passed for all 40 public files against the local build and both editions in Chrome, Firefox and WebKit at desktop/mobile sizes. Production diagnostic hooks are absent. The homepage and seven checked project paths retained their pre-deployment status and content hashes; `/pooplot/` and `/compounding-savings/` already returned 404 in this release's baseline and were not changed. Container identity, image, start time, restart count, mounts, compose configuration and protected source/runtime files were unchanged. No restarts, image rebuilds, DNS changes or portfolio edits were performed.
+
+If rollback is needed, inspect the audit reports first, then run the private, guarded rollback helper on the server:
+
+```sh
+python3 /root/pierre-deployments/20261019T190851Z-5090dc0/rollback.py
+```
+
+It verifies the active release and agreement between the previous copies before exchanging only Pierre's two directories back. It refuses a repeat rollback or a different active release. The underlying `promote.py` helper exchanges directories in either direction; do not rerun it directly. The rollback helper is prepared but has not been executed. Recheck the public game and portfolio after any rollback. The existing Docker-image persistence caveat above still applies.

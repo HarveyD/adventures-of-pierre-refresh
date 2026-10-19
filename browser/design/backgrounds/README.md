@@ -1,6 +1,6 @@
 # Refresh Backgrounds
 
-Generated illustrations based on the original `Background 1.png`, using the built-in image generator. These are new illustrations, not recovered school-project artwork. Approved versions are integrated into Refresh locally; this update has not been deployed. Original remains untouched.
+Generated illustrations based on the original `Background 1.png`, using the built-in image generator. These are new illustrations, not recovered school-project artwork. Approved versions are integrated into Refresh and published in release `20261019T190851Z-5090dc0`; see [the deployment record](../../HOSTING.md). Original remains untouched.
 
 | Refresh Chapter | Music | Background |
 | --- | --- | --- |

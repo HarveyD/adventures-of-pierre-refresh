@@ -10,4 +10,4 @@ The creator selected a faithful pixel-art remaster rather than a smooth cartoon 
 
 PNG outputs are copied unchanged, retaining their real alpha channel. `src/game/refreshSprites.ts` defines measured frame rectangles. Frames are cropped at texture-load time, drawn at a constant pixel scale, and aligned by their feet to the existing collision boxes. Left-facing poses use runtime mirroring. The remaster uses a new four-step run cycle; it is not an upscale of the old twelve-frame animation. Corgis gain a four-step walking cycle. Physics, patrol boundaries, and level timings are unchanged.
 
-Refresh renders a 2x backing canvas with a matching camera zoom, preserving logical world size and the mobile viewport while using the extra sprite detail on high-density screens. Original keeps its 1x renderer. No live deployment has been made for this update.
+Refresh renders a 2x backing canvas with a matching camera zoom, preserving logical world size and the mobile viewport while using the extra sprite detail on high-density screens. Original keeps its 1x renderer. Published in release `20261019T190851Z-5090dc0`; see [the deployment record](../../HOSTING.md).
