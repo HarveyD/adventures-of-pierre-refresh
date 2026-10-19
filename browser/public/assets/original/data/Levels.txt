@@ -1,0 +1,82 @@
+Background 1.jpg
+5
+18
+1 first ground platform,400,680,1100,1000,0
+2 left most wall,400,0,50,1000,0
+3 first jump,1200,530,300,500,0
+4 finish level box,9000,600,100,100,2
+5 second ground platform,2000,680,4150,1000,0
+6 bottom of pits,400,1000,10000,1000,5
+7 second jump,2500,530,300,500,0
+8 third jump,3500,530,300,500,0
+9 first wall jump platform,4300,-500,100,1000,0
+10 second wall jump platform,4700,-300,100,1000,0
+11 floating platform 1,5400,530,300,50,0
+12 floating platform 2,5800,400,300,50,0
+13 fourth wall,6100,400,50,600,0
+14 third ground platform,6600,680,1000,1000,0
+15 fourth ground platform,8600,680,1000,1000,0
+16 trampoline platform,7950,680,300,50,1
+17 checkpoint 1,3000,600,50,80,4
+18 second ground platform,9600,-200,50,2000,0
+17
+1 first ground platform,400,680,1200,1000,0
+2 left most wall,400,0,50,1000,0
+3 first platform,1300,530,300,500,0
+4 finish level box,10000,40,100,100,2
+5 second ground platform,2200,680,1600,1000,0
+6 second platform,2200,530,800,500,0
+7 first moving platform,3800,680,300,50,3,800,0
+8 third ground platform,4900,680,1000,1000,0
+9 pit platform,-200,1300,10000,1000,5
+10 first tower,6200,530,300,1000,0
+11 second tower,6800,400,300,1000,0
+12 third tower,7400,270,300,1000,0
+13 fourth ground platform,8000,140,3000,1000,0
+14 spikes,8400,100,300,40,5
+15 spikes 2,9000,-200,300,40,5
+16 roof 1,8000,-500,1500,300,0
+17 final wall,11000,-1000,50,3000,0
+12
+1 first ground platform,400,680,1000,1000,0
+2 left most wall,400,0,50,1000,0
+3 finish level box,9000,600,100,100,2
+4 moving plattform,1400,680,300,50,3,2000,0
+5 bottom of pits,10,1300,10000,1000,5
+6 block 1,1800,580,50,100,0
+7 block 2,2200,580,50,100,0
+8 block 3,2600,580,50,100,0
+9 block 4,3000,580,50,100,0
+10 block 5,3400,580,50,100,0
+11 ground platform 2,3700,680,1000,1000,0
+12 elevator platform 1,4700,680,300,50,6,0
+3
+1 first ground platform,400,680,2000,1000,0
+2 left most wall,400,0,50,1000,0
+3 finish level box,3000,600,100,100,2
+3
+1 first ground platform,400,680,2000,1000,0
+2 left most wall,400,0,50,1000,0
+3 finish level box,3000,600,100,100,2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

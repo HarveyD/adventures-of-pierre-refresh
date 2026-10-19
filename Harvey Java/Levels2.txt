@@ -1,0 +1,101 @@
+background 1.png
+5
+22
+1 bottom of pits,400,1000,9000,1000,5
+2 left most wall,400,0,50,1000,0
+3 first jump,1200,530,300,500,0
+4 second ground platform,9600,-200,50,20000,0
+5 second ground platform,2000,680,4150,10000,0
+6 first ground platform,400,680,1100,10000,0
+7 second jump,2500,530,300,500,0
+8 third jump,3500,530,300,500,0
+9 first wall jump platform,4300,-500,50,1000,0
+10 second wall jump platform,4700,-300,50,1000,0
+11 floating platform 1,5400,500,300,50,0
+12 floating platform 2,5800,380,300,50,0
+13 fourth wall,6100,380,50,590,0
+14 third ground platform,6600,680,1000,10000,0
+15 fourth ground platform,8600,680,1000,10000,0
+16 trampoline platform,7950,680,300,50,1
+17 checkpoint 1,2300,679,5,100,4
+18 finish level box,9000,679,5,100,2
+19 bottom of the bottom of pits,400,1050,9000,1000,0
+20 checkpoint 2,4300,680,5,100,4
+21 checkpoint 3,5200,680,5,100,4
+22 checkpoint 4,7000,680,5,100,4
+18
+1 first ground platform,400,680,1200,1000,0
+2 left most wall,400,0,50,1000,0
+3 first platform,1300,530,300,500,0
+4 final wall,11000,-1000,50,3000,0
+5 second ground platform,2200,680,1600,1000,0
+6 second platform,2200,530,800,500,0
+7 first moving platform,3800,680,300,50,3,800,0
+8 third ground platform,4900,680,1000,1000,0
+9 pit platform,-200,1300,10000,1000,5
+10 first tower,6200,530,300,1000,0
+11 second tower,6800,400,300,1000,0
+12 third tower,7400,270,300,1000,0
+13 fourth ground platform,8000,140,3000,1000,0
+14 spikes,8400,100,300,40,5
+15 spikes 2,9000,100,300,40,5
+16 roof 1,8000,-500,1500,300,0
+17 finish level box,10000,139,5,100,2
+18 checkpoint 1,5400,680,5,100,4
+28
+1 first ground platform,400,680,1000,1000,0
+2 left most wall,400,0,50,1000,0
+3 first wall stopy thing,400,0,300,50,0
+4 moving platform,1400,680,300,50,3,2000,0
+5 bottom of pits,10,1300,10000,1000,5
+6 block 1,1700,630,50,50,5
+7 block 2,2200,630,50,50,5
+8 block 3,2600,630,50,50,5
+9 block 4,3000,630,50,50,5
+10 block 5,3400,630,50,50,5
+11 ground platform 2,3700,680,1000,1000,0
+12 checkpoint 1,4200,679,5,100,4
+13 moving platform 2,4700,680,300,50,3,500,0
+14 moving platform 3,6300,580,300,50,3,500,499
+15 moving platform 3,6800,480,300,50,3,500,0
+16 third ground platform,7800,480,2000,1000,0
+17 wall jump 1,9800,-1000,50,3000,0
+18 wall jump 2,9500,-1300,50,1650,0
+19 spikes walls,9790,120,10,50,5
+20 checkpoint 2,8200,479,5,100,4
+21 spikes on wall 2,9550,-100,10,50,5
+22 spikes on wall 3,9790,-320,10,50,5
+23 spikes on wall 4,9550,-540,10,50,5
+24 spikes on wall 5,9790,-760,10,50,5
+25 ground platform 4,9840,-1000,1000,20000,0
+26 final wall,10790,-2000,50,1000,0
+27 final wall stopy thing,10490,-2000,300,50,0
+28 finish level box,10500,-1001,5,100,2
+23
+1 bottom of pits,1000,1000,10000,1000,5
+2 first ground platform,400,680,2000,1000,0
+3 left most wall,400,0,50,1000,0
+4 finish level box,3000,600,100,100,2
+5 floating platform 1,2400,300,600,50,0
+6 wall jump 1,2000,100,50,400,0
+7 floating platform 2,3000,500,600,50,0
+8 ground platform 2,3600,680,4000,5000,0
+9 wall jump 2,5600,00,50,2000,0
+10 floating platform 3,4000,300,1200,50,0
+11 spikes 1,4400,280,50,20,5
+12 wall jump 3,4000,-600,50,900,0
+13 floating platform 4,4400,-100,1250,150,0
+14 spikes 2,4800,280,50,20,5
+15 checkpoint 1,4000,680,5,100,4
+16 spikes 3,4800,660,50,20,5
+17 spikes 4,4400,660,50,20,5
+18 moving death platform 1,6400,180,200,300,6,200,0
+19 random platform,6300,80,400,300,0
+20 checkpoint 2,6100,680,5,100,4
+21 anti cheat block 1,3625,-700,800,50,0
+22 wall 1,6475,-500,50,580,0
+23 anti cheat block 2,6300,-500,400,50,0
+3
+1 first ground platform,400,680,2000,1000,0
+2 left most wall,400,0,50,1000,0
+3 finish level box,3000,600,100,100,2

@@ -1,0 +1,187 @@
+{
+  "animations": {
+    "player-idle": {
+      "file": "player-idle.png",
+      "width": 35,
+      "height": 50,
+      "durations": [
+        1200
+      ],
+      "loop": null,
+      "source": "Pierre standing still.gif"
+    },
+    "player-run-right": {
+      "file": "player-run-right.png",
+      "width": 35,
+      "height": 50,
+      "durations": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": 0,
+      "source": "Pierre running right.gif"
+    },
+    "player-run-left": {
+      "file": "player-run-left.png",
+      "width": 35,
+      "height": 50,
+      "durations": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": 0,
+      "source": "pierre running left.gif"
+    },
+    "player-fall-right": {
+      "file": "player-fall-right.png",
+      "width": 35,
+      "height": 50,
+      "durations": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": 0,
+      "source": "falling to the right.gif"
+    },
+    "player-fall-left": {
+      "file": "player-fall-left.png",
+      "width": 35,
+      "height": 50,
+      "durations": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": 0,
+      "source": "falling to the left.gif"
+    },
+    "player-wall-right": {
+      "file": "player-wall-right.png",
+      "width": 35,
+      "height": 50,
+      "durations": [
+        960
+      ],
+      "loop": null,
+      "source": "on right wall.gif"
+    },
+    "player-wall-left": {
+      "file": "player-wall-left.png",
+      "width": 35,
+      "height": 50,
+      "durations": [
+        960
+      ],
+      "loop": null,
+      "source": "on left wall.gif"
+    },
+    "player-death": {
+      "file": "player-death.png",
+      "width": 50,
+      "height": 35,
+      "durations": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": 0,
+      "source": "death animation.gif"
+    }
+  },
+  "audio": {
+    "training": {
+      "files": [
+        "training.mp3",
+        "training.ogg"
+      ],
+      "source": "training level.wav"
+    },
+    "egypt": {
+      "files": [
+        "egypt.mp3",
+        "egypt.ogg"
+      ],
+      "source": "egyptian level.wav"
+    },
+    "snow": {
+      "files": [
+        "snow.mp3",
+        "snow.ogg"
+      ],
+      "source": "snow level.wav"
+    },
+    "moon": {
+      "files": [
+        "moon.mp3",
+        "moon.ogg"
+      ],
+      "source": "moon level.wav"
+    }
+  },
+  "sources": {
+    "Pierre standing still.gif": "804902e62699f688dd6b0b7384e3c3ca714f8209e4ce7d1a8f2b9ba6c8098863",
+    "Pierre running right.gif": "5bc87174a22bfb136cc02c3f2eb265f0caaa608911ec6af0622baaa1ea292cad",
+    "pierre running left.gif": "8afb21c263f80b76aec6e0f314495ae986e2390035c1d0e02d48cde66f983c8b",
+    "falling to the right.gif": "bd02b5de855784161a4f596dc1f098b58c900970bf2696be047f0368dca226e0",
+    "falling to the left.gif": "d0d520d375ead52260886f039c94f8df6345d2469cfba299db3507025c02d2d0",
+    "on right wall.gif": "fd4985f1e9c679e9a39470a7d104ff6419f18e1ba99ec878d4d976b0b932e217",
+    "on left wall.gif": "9fabfed53ee01b5121db89c2ecbe018d05e9a13ffdbd6ed34e17dd35e8fba504",
+    "death animation.gif": "838b3f3d00d44519c9fd8274e28d0c81ad533a2e822a073ff644fe24875e4b78",
+    "training level.wav": "87eff9e42f57c4c47fc564918888926156d35ed059f92fb7ff840b0807fe2f20",
+    "egyptian level.wav": "b31fa907b5f1db7c716bdce38aa1bf5e5e086d1a819e75cb54fa574118f4d292",
+    "snow level.wav": "7d3a458ed682177dc343ac3890c90c870168cd5bccc3b028a5dc81bf85a41cd8",
+    "moon level.wav": "066c84a44471d985034be96c21fdae7df271b4a9a0b834988535b62bdfc3ecee"
+  }
+}
