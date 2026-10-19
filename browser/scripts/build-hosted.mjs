@@ -13,7 +13,7 @@ const archive = resolve(releases, 'adventures-of-pierre.tar.gz');
 
 const run = (command, args) => {
   const result = spawnSync(command, args, {
-    cwd: root, env: { ...process.env, PIERRE_BASE_PATH: base }, stdio: 'inherit',
+    cwd: root, env: { ...process.env, PIERRE_BASE_PATH: base, COPYFILE_DISABLE: '1' }, stdio: 'inherit',
   });
   if (result.error) throw result.error;
   if (result.status !== 0) process.exit(result.status ?? 1);
@@ -30,6 +30,10 @@ for (const edition of ['original', 'refresh']) {
 
 mkdirSync(releases, { recursive: true });
 run('tar', ['-czf', archive, '-C', resolve(root, 'hosted-dist'), 'adventures-of-pierre']);
+const contents = spawnSync('tar', ['-tzf', archive], { encoding: 'utf8' });
+assert.equal(contents.status, 0, 'The release archive must be readable.');
+assert(!contents.stdout.split('\n').some(path => path.split('/').some(part => part.startsWith('._') || part === '.DS_Store')),
+  'The release archive must not contain macOS metadata files.');
 const digest = createHash('sha256').update(readFileSync(archive)).digest('hex');
 writeFileSync(archive + '.sha256', `${digest}  adventures-of-pierre.tar.gz\n`);
 console.log(`\nPrepared ${archive}\nSHA-256: ${digest}\nTarget path: ${base}\nBuild only: nothing has been uploaded or deployed.`);
